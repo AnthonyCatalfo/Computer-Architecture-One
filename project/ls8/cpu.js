@@ -1,6 +1,8 @@
 /**
  * LS-8 v2.0 emulator skeleton code
  */
+// const ADD = 0b10101000
+
 
 /**
  * Class for simulating a simple Computer (CPU & memory)
@@ -68,7 +70,7 @@ class CPU {
         // from the memory address pointed to by the PC. (I.e. the PC holds the
         // index into memory of the instruction that's about to be executed
         // right now.)
-        this.reg[IR] = this.reg[PC];
+        this.reg.IR = this.ram.read(this.reg.PC);
 
         // !!! IMPLEMENT ME
 
@@ -83,14 +85,14 @@ class CPU {
 
         // Execute the instruction. Perform the actions for the instruction as
         // outlined in the LS-8 spec.
-            
+
         // !!! IMPLEMENT ME
-        switch (opperation,a,b) {
+        switch (opperation) {
             case "ADD":
                 let operandA = operandA + operandB;
                 break;
             case "MUL":
-                acc = operandA * operandB;
+                operandA = operandA * operandB;
                 break;
 
 
