@@ -58,6 +58,7 @@ class CPU {
         switch (op) {
             case 'MUL':
                 // !!! IMPLEMENT ME
+                this.reg[regA] *= this.reg[regB];
                 break;
         }
     }
@@ -70,35 +71,40 @@ class CPU {
         // from the memory address pointed to by the PC. (I.e. the PC holds the
         // index into memory of the instruction that's about to be executed
         // right now.)
-        this.reg.IR = this.ram.read(this.reg.PC);
+        const IR = this.reg.PC;
+        const LDI = 0b10011001;
+        const MUL = 0b10101010;
+        const PRN = 0b01000011;
+        const HLT = 0b00000001;
 
         // !!! IMPLEMENT ME
 
         // Debugging output
-        console.log(`${this.reg.PC}: ${IR.toString(2)}`);
+        // console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
-        let operandA = this.ram.read(this.reg[PC + 1]);
-        let operandB = this.ram.read(this.reg[PC + 2]);
+        let operandA = this.ram.read(IR + 1);
+        let operandB = this.ram.read(IR + 2);
         // !!! IMPLEMENT ME
 
         // Execute the instruction. Perform the actions for the instruction as
         // outlined in the LS-8 spec.
 
         // !!! IMPLEMENT ME
-        switch (opperation) {
-            case "ADD":
-                let operandA = operandA + operandB;
+        switch (this.ram.read(IR)) {
+            case HLT:
+                this.stopClock();
                 break;
-            case "MUL":
-                operandA = operandA * operandB;
+            case PRN:
+                console.log(this.reg[operandA]);
                 break;
-
-
-
-
-
+            case LDI:
+                this.reg[operandA] = operandB;
+                break;
+            case MUL:
+                this.alu('MUL', operandA, operandB);
+                break;
         }
         // Increment the PC register to go to the next instruction. Instructions
         // can be 1, 2, or 3 bytes long. Hint: the high 2 bits of the
@@ -106,6 +112,9 @@ class CPU {
         // for any particular instruction.
 
         // !!! IMPLEMENT ME
+        this.reg.PC += 1;
+        const num = this.ram.read(IR) >>> 6;
+        this.reg.PC += num;
     }
 }
 
