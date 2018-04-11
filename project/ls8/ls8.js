@@ -36,7 +36,10 @@ let ram = new RAM(256);
 let cpu = new CPU(ram);
 
 // TODO: get name of ls8 file to load from command line
-
-loadMemory(cpu);
-
-cpu.startClock();
+if (process.argv.length !== 3) {
+    cpu.error();
+} else {
+// TODO: get name of ls8 file to load from command line
+    loadMemory(cpu);
+    cpu.startClock();
+}

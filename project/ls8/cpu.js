@@ -44,6 +44,11 @@ class CPU {
         clearInterval(this.clock);
     }
 
+    error() {
+        console.log('ERROR! Improper argument length');
+        this.stopClock();
+    }
+
     /**
      * ALU functionality
      *
