@@ -31,6 +31,12 @@ class CPU {
             case 'MUL':
                 this.reg[regA] *= this.reg[regB];
                 break;
+            case 'ADD':
+                this.reg[regA] += this.reg[regB];
+                break;
+            default:
+                console.log('There was an error in the ALU...command not found');
+                break;
         }
     }
 
@@ -38,15 +44,19 @@ class CPU {
         const IR = this.reg.PC;
         const LDI = 0b10011001;
         const MUL = 0b10101010;
+        const ADD = 0b10101000;
         const PRN = 0b01000011;
         const HLT = 0b00000001;
         const PUSH = 0b01001101;
         const POP = 0b01001100;
         const CALL = 0b01001000;
         const RET = 0b00001001;
+        const TEST = 0b00011000;
 
         let operandA = this.ram.read(IR + 1);
         let operandB = this.ram.read(IR + 2);
+
+        let proceed = true;
 
         switch (this.ram.read(IR)) {
             case HLT:
@@ -61,6 +71,9 @@ class CPU {
             case MUL:
                 this.alu('MUL', operandA, operandB);
                 break;
+            case ADD:
+                this.alu('ADD', operandA, operandB);
+                break;
             case PUSH:
                 this.reg[SP] -= 1;
                 this.ram.write(this.reg[SP], this.reg[operandA]);
@@ -70,19 +83,24 @@ class CPU {
                 this.reg[SP] += 1;
                 break;
             case CALL:
-                console.log('calling');
+                proceed = false;                            
                 break;
             case RET:
-                console.log('returning');
+                proceed = true;
+                break;
+            case TEST:
+                console.log('testing');
                 break;
             default:
-                console.log(`Error at position: ${IR}`);
+                console.log(`Error at position: ${IR}, code: ${this.ram.read(IR)}`);
                 this.stopClock();
         }
 
-        this.reg.PC += 1;
-        const num = this.ram.read(IR) >>> 6;
-        this.reg.PC += num;
+        if (proceed) {
+            this.reg.PC += 1;
+            const num = this.ram.read(IR) >>> 6;
+            this.reg.PC += num;
+        }
     }
 }
 
