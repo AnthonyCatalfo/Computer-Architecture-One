@@ -61,7 +61,7 @@ class CPU {
                 break;
             case PUSH:
                 this.reg[SP] -= 1;
-                this.ram.write(this.reg[SP], this.reg[operandA])
+                this.ram.write(this.reg[SP], this.reg[operandA]);
                 break;
             case POP:
                 this.reg[operandA] = this.ram.read(this.reg[SP]);
