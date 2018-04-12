@@ -42,6 +42,8 @@ class CPU {
         const HLT = 0b00000001;
         const PUSH = 0b01001101;
         const POP = 0b01001100;
+        const CALL = 0b01001000;
+        const RET = 0b00001001;
 
         let operandA = this.ram.read(IR + 1);
         let operandB = this.ram.read(IR + 2);
@@ -67,6 +69,15 @@ class CPU {
                 this.reg[operandA] = this.ram.read(this.reg[SP]);
                 this.reg[SP] += 1;
                 break;
+            case CALL:
+                console.log('calling');
+                break;
+            case RET:
+                console.log('returning');
+                break;
+            default:
+                console.log(`Error at position: ${IR}`);
+                this.stopClock();
         }
 
         this.reg.PC += 1;
