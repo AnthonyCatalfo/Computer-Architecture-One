@@ -4,9 +4,9 @@ let subroutine = false;
 class CPU {
     constructor(ram) {
         this.ram = ram;
-        this.reg = new Array(8).fill(0); // General-purpose registers R0-R7
+        this.reg = new Array(8).fill(0);
         this.reg[SP] = 0xf4;
-        this.reg.PC = 0; // Program Counter
+        this.reg.PC = 0;
     }
 
     poke(address, value) {
@@ -16,7 +16,7 @@ class CPU {
     startClock() {
         this.clock = setInterval(() => {
             this.tick();
-        }, 1); // 1 ms delay == 1 KHz clock == 0.000001 GHz
+        }, 1);
     }
 
     stopClock() {
