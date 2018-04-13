@@ -1,6 +1,7 @@
 const SP = 0b00000111;
-let temp = null;
+let locationHolder = null;
 let subroutine = false;
+
 class CPU {
     constructor(ram) {
         this.ram = ram;
@@ -82,13 +83,12 @@ class CPU {
                 this.reg[SP] += 1;
                 break;
             case CALL:
-                temp = this.reg.PC + 1;
+                locationHolder = this.reg.PC + 1;
                 this.reg.PC = this.reg[1];
                 subroutine = true;
                 break;
             case RET:
-                this.reg.PC = temp;
-                temp = null;
+                this.reg.PC = locationHolder;
                 break;
             default:
                 console.log(`Error at position: ${IR}, code: ${this.ram.read(IR)}`);
