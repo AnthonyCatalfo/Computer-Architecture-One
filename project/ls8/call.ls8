@@ -6,7 +6,7 @@
 # 30
 # 36
 # 60
- 
+
 # MAIN
 
 10011001 # LDI R1,MULT2PRINT  R1 points to the MULT2PRINT subroutine

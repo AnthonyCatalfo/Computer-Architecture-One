@@ -1,4 +1,6 @@
 const SP = 0b00000111;
+let temp = null;
+let subroutine = false;
 class CPU {
     constructor(ram) {
         this.ram = ram;
@@ -51,12 +53,9 @@ class CPU {
         const POP = 0b01001100;
         const CALL = 0b01001000;
         const RET = 0b00001001;
-        const TEST = 0b00011000;
 
         let operandA = this.ram.read(IR + 1);
         let operandB = this.ram.read(IR + 2);
-
-        let proceed = true;
 
         switch (this.ram.read(IR)) {
             case HLT:
@@ -83,23 +82,24 @@ class CPU {
                 this.reg[SP] += 1;
                 break;
             case CALL:
-                proceed = false;                            
+                temp = this.reg.PC + 1;
+                this.reg.PC = this.reg[1];
+                subroutine = true;
                 break;
             case RET:
-                proceed = true;
-                break;
-            case TEST:
-                console.log('testing');
+                this.reg.PC = temp;
+                temp = null;
                 break;
             default:
                 console.log(`Error at position: ${IR}, code: ${this.ram.read(IR)}`);
                 this.stopClock();
         }
-
-        if (proceed) {
+        if (!subroutine) {
             this.reg.PC += 1;
             const num = this.ram.read(IR) >>> 6;
             this.reg.PC += num;
+        } else {
+            subroutine = false;
         }
     }
 }

@@ -16,7 +16,7 @@ function loadMemory() {
         .readFileSync(data, 'utf8')
         .split('\n')
         .reduce((mem, binary) => {
-            if (binary[0] !== '#' && binary !== '') {
+            if (binary.trim()[0] !== '#' && binary.trim() !== '') {
                 return mem.concat([binary.slice(0, 8)]);
             } else {
                 return mem;
